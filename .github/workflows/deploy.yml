@@ -1,4 +1,4 @@
-name: Deploy FindFruit
+name: CI/CD Deploy FindFruit
 
 on:
   push:
