@@ -1,23 +1,33 @@
-
 version: '3.8'
 
 services:
-  findfruit:
-    image: ${DOCKER_USERNAME}/findfruit:latest
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./ssl:/etc/ssl/certs:ro
-    restart: unless-stopped
-    labels:
-      - "com.docker.compose.service=findfruit"
+  site:
+    image: nginx:alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
 
-  watchtower:
-    image: containrrr/watchtower
+        # Regra para acessar pelos dois domínios (sem erro de sintaxe)
+        - "traefik.http.routers.findfruit.rule=Host(`findfruit.com.br`) || Host(`www.findfruit.com.br`)"
+
+        # Entrypoint seguro (HTTPS)
+        - "traefik.http.routers.findfruit.entrypoints=websecure"
+
+        # Resolver do TLS (Let's Encrypt)
+        - "traefik.http.routers.findfruit.tls.certresolver=letsencryptresolver"
+
+        # Porta interna exposta no container (nginx serve na 80)
+        - "traefik.http.services.findfruit.loadbalancer.server.port=80"
+
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 300 --cleanup
-    restart: unless-stopped
+      - ./dist:/usr/share/nginx/html:ro
+
+    networks:
+      - network_public
+
+networks:
+  network_public:
+    external: true
