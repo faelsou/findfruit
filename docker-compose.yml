@@ -1,28 +1,31 @@
-
 version: '3.8'
 
 services:
-  findfruit-app:
-    build: .
-    ports:
-      - "3000:80"
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    restart: unless-stopped
+  site:
+    image: faelsouz/findfruit:TAG_PLACEHOLDER
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        # Habilita o Traefik para este serviço
+        - "traefik.enable=true"
 
-  findfruit-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    ports:
-      - "5173:5173"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-    command: npm run dev
-    profiles:
-      - dev
+        # Regras de roteamento para os domínios (com www e sem www)
+        - "traefik.http.routers.findfruit.rule=Host(`findfruit.com.br`) || Host(`www.findfruit.com.br`)"
+
+        # Entrypoint para tráfego HTTPS (porta 443)
+        - "traefik.http.routers.findfruit.entrypoints=websecure"
+
+        # Resolvedor Let's Encrypt (ajuste o nome conforme sua config do Traefik)
+        - "traefik.http.routers.findfruit.tls.certresolver=letsencryptresolver"
+
+        # Serviço interno - porta onde o nginx escuta dentro do container
+        - "traefik.http.services.findfruit.loadbalancer.server.port=80"
+
+    networks:
+      - network_public
+
+networks:
+  network_public:
+    external: true
