@@ -61,4 +61,5 @@ jobs:
             sed -i "s|image: .*$|image: ${DOCKER_USERNAME}/findfruit:${IMAGE_TAG}|" docker-compose.yml
             docker-compose pull
             docker-compose up -d
+            docker stack deploy -c docker-compose.yml findfruit
             docker system prune -f -a --volumes --force
