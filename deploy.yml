@@ -1,1 +1,3 @@
+# Comando para subir e deixar a aplicação disponível
 docker stack deploy -c docker-compose.yml findfruit
+
