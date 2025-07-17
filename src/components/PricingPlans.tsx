@@ -14,7 +14,7 @@ const PricingPlans = () => {
       name: "Básico",
       price: "R$ 9,90",
       period: "/mês",
-      features: ["50 análises por mês", "Receitas básicas", "Suporte via chat"],
+      features: ["Análises ilimitadas", "Receitas básicas"],
       popular: false
     },
     {
@@ -22,15 +22,15 @@ const PricingPlans = () => {
       name: "Premium",
       price: "R$ 19,90",
       period: "/mês",
-      features: ["Análises ilimitadas", "Receitas personalizadas", "Histórico completo", "Suporte prioritário"],
+      features: ["Análises ilimitadas", "Receitas básicas", "E-Book de Receitas"],
       popular: true
     },
     {
-      id: "family",
-      name: "Família",
+      id: "B2B",
+      name: "Empresas",
       price: "R$ 29,90",
       period: "/mês",
-      features: ["Até 5 usuários", "Todas as funcionalidades", "Lista de compras compartilhada", "Suporte 24/7"],
+      features: ["Funcionalidades Básico", "Premium"],
       popular: false
     }
   ];
