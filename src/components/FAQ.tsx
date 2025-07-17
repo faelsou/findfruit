@@ -14,7 +14,7 @@ const FAQ = () => {
     },
     {
       question: "O FindFruit é realmente gratuito?",
-      answer: "Sim! Todas as funcionalidades básicas são completamente gratuitas, incluindo análise de imagens, informações nutricionais e sugestões de receitas. Você pode usar quantas vezes quiser sem nenhum custo."
+      answer: "Sim! Todas as funcionalidades básicas são completamente gratuitas nas 3 primeiras pesquisas."
     },
     {
       question: "Quais tipos de frutas e legumes são reconhecidos?",
@@ -84,7 +84,7 @@ const FAQ = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="https://wa.me/5511999999999" 
+                href="https://wa.me/5511945237617" 
                 className="inline-flex items-center justify-center px-6 py-3 bg-fruit-green-600 text-white rounded-lg hover:bg-fruit-green-700 transition-colors"
               >
                 Falar no WhatsApp

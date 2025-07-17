@@ -18,7 +18,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       name: "Básico",
       price: "R$ 9,90",
       period: "/mês",
-      features: ["50 análises por mês", "Receitas básicas", "Suporte via chat"],
+      features: ["Análises ilimitadas", "Receitas básicas"],
       popular: false
     },
     {
@@ -26,7 +26,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       name: "Premium",
       price: "R$ 19,90",
       period: "/mês",
-      features: ["Análises ilimitadas", "Receitas personalizadas", "Histórico completo", "Suporte prioritário"],
+      features: ["Análises ilimitadas", "Receitas básica", "Histórico completo", "e-book receitas"],
       popular: true
     },
     {

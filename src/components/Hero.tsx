@@ -12,7 +12,7 @@ const Hero = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentWord(prev => prev === "passadas" ? "no ponto" : "passadas");
+      setCurrentWord(prev => prev === "verdes" ? "maduras" : "passadas");
     }, 2000);
 
     return () => clearInterval(interval);
@@ -36,10 +36,10 @@ const Hero = () => {
                   <span className="text-sm text-gray-600">Mais de 10.000 usuários satisfeitos</span>
                 </div>
                 
-                <h1 className="text-4xl md:text-6xl font-bold font-poppins text-gray-900 leading-tight">
-                  {currentWord === "passadas" ? "Nunca mais compre frutas" : "Compre frutas"}{" "}
-                  <span className="bg-gradient-to-r from-fruit-green-600 to-fruit-orange-500 bg-clip-text text-transparent transition-all duration-500">
-                    {currentWord}
+                 <h1 className="text-4xl md:text-6xl font-bold font-poppins text-gray-900 leading-tight">
+                  Compre frutas{" "}
+                  <span className="bg-gradient-to-r from-fruit-green-600 to-fruit-orange-500 bg-clip-text text-transparent">
+                    maduras
                   </span>
                 </h1>
                 

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   site:
-    image: faelsouz/findfruit:TAG_PLACEHOLDER
+    image: /findfruit:93ed9291daf8556aa32d09ee1fd34f532bc62e9f
     deploy:
       replicas: 1
       restart_policy:
