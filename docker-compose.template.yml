@@ -1,5 +1,5 @@
+# docker-compose.template.yml
 version: '3.8'
-
 services:
   site:
     image: faelsouz/findfruit:${IMAGE_TAG}
@@ -8,21 +8,11 @@ services:
       restart_policy:
         condition: on-failure
       labels:
-        # Habilita o Traefik para este serviço
         - "traefik.enable=true"
-
-        # Regras de roteamento para os domínios (com www e sem www)
         - "traefik.http.routers.findfruit.rule=Host(`findfruit.com.br`) || Host(`www.findfruit.com.br`)"
-
-        # Entrypoint para tráfego HTTPS (porta 443)
         - "traefik.http.routers.findfruit.entrypoints=websecure"
-
-        # Resolvedor Let's Encrypt (ajuste o nome conforme sua config do Traefik)
         - "traefik.http.routers.findfruit.tls.certresolver=letsencryptresolver"
-
-        # Serviço interno - porta onde o nginx escuta dentro do container
         - "traefik.http.services.findfruit.loadbalancer.server.port=80"
-
     networks:
       - network_public
 
