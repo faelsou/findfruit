@@ -27,8 +27,7 @@ jobs:
 
       - name: Define Image Tag
         id: meta
-        run: |
-          echo "tag=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+        run: echo "tag=${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
@@ -41,9 +40,27 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  upload-compose-template:
+    name: Upload Compose Template
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Upload docker-compose.template.yml
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "docker-compose.template.yml"
+          target: "/var/www/findfruit/"
+
   deploy-to-server:
     name: Deploy to Server via SSH
-    needs: build-and-push
+    needs: [build-and-push, upload-compose-template]
     runs-on: ubuntu-latest
 
     steps:
@@ -56,10 +73,18 @@ jobs:
           envs: IMAGE_TAG
           script: |
             IMAGE_TAG=${{ needs.build-and-push.outputs.image_tag }}
+            echo "🚀 Deploying tag: $IMAGE_TAG"
+
+            cd /var/www/findfruit
+
+            if [ ! -f docker-compose.template.yml ]; then
+              echo "❌ docker-compose.template.yml não encontrado!"
+              exit 1
+            fi
+
             export IMAGE_TAG
             envsubst < docker-compose.template.yml > docker-compose.yml
-            
+
             docker-compose pull
             docker stack deploy -c docker-compose.yml findfruit
-            
-
+            docker system prune -f -a --volumes
