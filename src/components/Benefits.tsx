@@ -31,7 +31,7 @@ const Benefits = () => {
     {
       icon: <CheckCircle className="w-8 h-8 text-fruit-green-500" />,
       title: "100% gratuito",
-      description: "Todas as funcionalidades básicas sem custo"
+      description: "Disponibilizamos todas as funcionalidades até a 3ª pesquisa. "
     }
   ];
 
