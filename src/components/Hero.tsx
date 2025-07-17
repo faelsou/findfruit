@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Play, Star, Users } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DemoModal from "./DemoModal";
 import PaymentModal from "./PaymentModal";
 import { sendPhotoInstruction } from "@/utils/whatsapp";
@@ -41,6 +41,7 @@ const Hero = () => {
                   Compre frutas{" "}
                   <span className="bg-gradient-to-r from-fruit-green-600 to-fruit-orange-500 bg-clip-text text-transparent">
                     maduras
+                  </span>  
                 </h1>
                 
                 <p className="text-xl text-gray-600 leading-relaxed">

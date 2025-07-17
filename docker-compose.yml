@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   site:
-    image: /findfruit:93ed9291daf8556aa32d09ee1fd34f532bc62e9f
+    image: faelsouz/findfruit:v1.0.0
     deploy:
       replicas: 1
       restart_policy:
