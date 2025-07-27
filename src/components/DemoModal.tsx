@@ -16,7 +16,7 @@ const DemoModal = ({ isOpen, onClose }: DemoModalProps) => {
     {
       title: "1. Envie uma foto",
       description: "Tire uma foto da sua fruta ou legume",
-      image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=300&h=200&fit=crop",
+      image: "https://unsplash.com/photos/red-tomato-on-black-leather-textile-tI7D8dcDGCg=crop",
     },
     {
       title: "2. Análise instantânea",

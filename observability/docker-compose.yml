@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   prometheus:
-    image: prom/prometheus
-    ports: 
+    image: prom/prometheus:latest
+    ports:
       - "9090:9090"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -11,29 +11,94 @@ services:
     networks:
       - network_public
     deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.prometheus.rule=Host(`prometheus.findfruit.com.br`)"
-        - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
         - "traefik.http.routers.prometheus.entrypoints=websecure"
         - "traefik.http.routers.prometheus.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:latest
     environment:
-    - GF_SECURITY_ADMIN_USER=admin
-    - GF_SECURITY_ADMIN_PASSWORD=061603F@tim@
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD_FILE=/run/secrets/grafana_admin_password
     volumes:
       - grafana_data:/var/lib/grafana
     networks:
       - network_public
+    secrets:
+      - grafana_admin_password
     deploy:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.grafana.rule=Host(`grafana.findfruit.com.br`)"
-        - "traefik.http.services.grafana.loadbalancer.server.port=3000"
         - "traefik.http.routers.grafana.entrypoints=websecure"
         - "traefik.http.routers.grafana.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - network_public
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+      labels:
+        - "traefik.enable=false"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - network_public
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+      labels:
+        - "traefik.enable=false"
+
+  blackbox:
+    image: prom/blackbox-exporter:latest
+    volumes:
+      - ./blackbox-config.yml:/etc/blackbox_exporter/config.yml
+    networks:
+      - network_public
+    ports:
+      - "9115:9115"
+    command:
+      - '--config.file=/etc/blackbox_exporter/config.yml'
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "traefik.enable=false"
 
 volumes:
   prom_data:
@@ -42,3 +107,8 @@ volumes:
 networks:
   network_public:
     external: true
+
+secrets:
+  grafana_admin_password:
+    external: true
+
