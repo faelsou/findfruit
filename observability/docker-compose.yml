@@ -22,6 +22,14 @@ services:
         - "traefik.http.routers.prometheus.tls.certresolver=letsencryptresolver"
         - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
 
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle' # Permite recarregar a config via API
+      - '--web.enable-remote-write-receiver' # <-- A FLAG ESSENCIAL QUE PRECISAMOS    
+
   grafana:
     image: grafana/grafana:latest
     environment:

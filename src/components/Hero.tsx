@@ -98,9 +98,9 @@ const Hero = () => {
                     </div>
                     
                     <div className="bg-white rounded-xl p-3 mb-3">
-                      <img 
-                        src="/src/assets/mango-analysis.jpg" 
-                        alt="Manga analisada"
+                      <img
+                        src="https://source.unsplash.com/tI7D8dcDGCg/600x400"
+                        alt="Manga analisado"
                         className="w-full h-24 object-cover rounded-lg mb-2"
                       />
                       <p className="text-sm text-gray-800">Analisando sua imagem...</p>
